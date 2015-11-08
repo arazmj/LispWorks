@@ -1,26 +1,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;	Author: Amir Razmjou
+ ;;	Author: Amir Razmjou
 ;;	Student Id: 901928271
 ;;	Date: 9/4/2015
-;;	Homework 1
-;;	Artificual Intelligence CSE 5290 Dr. Philip Chan
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ ;;	Artificual Intelligence CSE 5290 Dr. Philip Chan
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun positive-count (list)
-  (if (or 									; check if the list is not empty and 
-        (null list) 						; every element is a number
+  (if (or ; check if the list is not empty and 
+        (null list) ; every element is a number
         (notevery #'numberp list))				
-    'nill									; return nill if list list of numbers					
-    (reduce 								; sum the elements of the list
+    'nill ; return nill if list list of numbers					
+    (reduce ; sum the elements of the list
       #'+ (mapcar 
             (lambda (x) 
-              (if (> x 0) 1 0)) list))))    ; map the list to 0 and 1s where 1 represent postives
+              (if (> x 0) 1 0)) list)))) ; map the list to 0 and 1s where 1 represent postives
 
-(defun between (x pair)						; 'between' predicate helper
-  (if (second pair)							; returns T if x is between first and second element
-    (if (and 								; of the pair list
+(defun between (x pair) ; 'between' predicate helper
+  (if (second pair) ; returns T if x is between first and second element
+    (if (and ; of the pair list
           (> x (first pair)) 
           (< x (second pair))) T)			
     (if (> x (first pair)) T)))
@@ -38,8 +35,8 @@
   (mapcar 
     (lambda(storm) 
       (list 
-        (first storm) 						; city name
-        (first								; category name
+        (first storm) ; city name
+        (first ; category name
           (find-if (lambda(category) 		; find first matching category
                      (between 
                        (second storm) 		; speed element in the storm list
@@ -60,9 +57,9 @@
     *categories*))
 
 (defun nested-member (key list)
-  (some #'identity							; find some non-nil element
+  (some #'identity ; find some non-nil element
     (mapcar (lambda (e)						
-              (if (listp e)					; if element is a list recall
+              (if (listp e) ; if element is a list recall
                 (nested-member key e)		 
                 (eq key e)))
       list)))
@@ -82,17 +79,17 @@
       (Peter (GeorgeW) (Laura)) 
       (Pat (Barack) (Michelle)))))
 
-(defun find-node (tree p)					; finds the matching node 
+(defun find-node (tree p) ; finds the matching node 
   (if tree
     (if (eq (car tree) p) tree 
-     (or 									; if current root is not the node
-        (find-node (second tree) p)			; recall the function on left tree and right tree
+     (or ; if current root is not the node
+        (find-node (second tree) p) ; recall the function on left tree and right tree
         (find-node (third tree) p)))))	
 
 (defun parents (tree p) 
-  (setq n (find-node tree p))				; find the node
-  (if (and (second n) (third n))			; if left tree and right tree exists
-    (list 									; return them as a list
+  (setq n (find-node tree p)) ; find the node
+  (if (and (second n) (third n)) ; if left tree and right tree exists
+    (list ; return them as a list
       (car (second n)) 
       (car (third n)))))	                  
 
@@ -122,15 +119,15 @@
             ((q))))
         ((f)))))  
 
-(defun first-person (tree)					; helper function return the first person in the node
+(defun first-person (tree) ; helper function return the first person in the node
       (if (listp tree)
         (first-person (car tree)) tree))
 
-(defun find-node2 (tree p)					; returns a pair with first element as a list to the node
-  (labels (    								; and second element as target node
-    (find-node-rec (tree p h)				; h is used to keep track of the path to target node
+(defun find-node2 (tree p) ; returns a pair with first element as a list to the node
+  (labels ( ; and second element as target node
+    (find-node-rec (tree p h) ; h is used to keep track of the path to target node
 	  (if tree 
-	    (if (member p (first tree)) 		; if p is member of the current node the current node is returned
+	    (if (member p (first tree)) ; if p is member of the current node the current node is returned
          (cons h (list tree))				
 	      (some #'identity
 	        (mapcar 
@@ -138,7 +135,7 @@
 	            (find-node-rec q p 
 	              (cons (first-person tree) h))) 
            (second tree)))))))
-    (find-node-rec tree p ())))				; start the helper function with empty path
+    (find-node-rec tree p ()))) ; start the helper function with empty path
 
 (defun spouse (tree p)
   (car 
@@ -170,7 +167,7 @@
 
 (defun siblings (tree p)
   (if (eq (first (first (second (find-node2 tree p)))) p)
-  (remove p									; remove the child from the list of siblings
+  (remove p ; remove the child from the list of siblings
     (children tree								
 	  (first (first (find-node2 tree p)))))))
   
